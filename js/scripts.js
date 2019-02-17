@@ -46,24 +46,21 @@ function Contact(firstName, lastName, phoneNumber) {
   this.phoneNumber = phoneNumber;
 }
 
-
 Contact.prototype.fullName = function(){
   return this.firstName + " " + this.lastName;
 }
 
 //Front-end Logic
+var addressBook = new AddressBook();
+
 $(function() {
-  $("form").submit(function(event) {
-    event.preventDefault();
-    contactCounter += 1;
-    var contact = "contact" + String(contactCounter);
-    var firstName = $("#firstName").val();
-    var lastName = $("#lastName").val();
-    var phoneNumber = $("#phoneNumber").val();
-    var addressBook = new AddressBook();
-    var contact = new Contact(firstName, lastName, phoneNumber);
-    console.log(contact);
-    addressBook.addContact(contact);
-    console.log(addressBook);
-  })
+  $("form#new-contact").submit(function(event) {
+     event.preventDefault();
+     var inputtedFirstName = $("input#new-first-name").val();
+     var inputtedLastName = $("input#new-last-name").val();
+     var inputtedPhoneNumber = $("input#new-phone-number").val();
+     var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber);
+     addressBook.addContact(newContact);
+     console.log(addressBook.contacts);
+   })
 });
