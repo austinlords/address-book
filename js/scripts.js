@@ -53,14 +53,50 @@ Contact.prototype.fullName = function(){
 //Front-end Logic
 var addressBook = new AddressBook();
 
+function displayContactDetails(addressBooktoDisplay) {
+  var contactsList = $("ul#contacts");
+  var htmlForContactInfo = "";
+  addressBooktoDisplay.contacts.forEach(function(contact) {
+    htmlForContactInfo += "<li id=" + contact.id + ">" + contact.firstName + " " + contact.lastName + "</li>";
+  });
+  contactsList.html(htmlForContactInfo);
+};
+
+function showContact(contactID) {
+  var contact = addressBook.findContact(contactID);
+  $("#show-contact").show();
+  $(".first-name").html(contact.firstName);
+  $(".last-name").html(contact.lastName);
+  $(".phone-number").html(contact.phoneNumber);
+  var buttons = $("#buttons");
+  buttons.empty();
+  buttons.append("<button class='deleteButton' id=" + contact.id + ">Delete</button>");
+};
+
+function attachContactListeners() {
+  $("ul#contacts").on("click", "li", function() {
+    showContact(this.id);
+  });
+  $("#buttons").on("click", ".deleteButton", function() {
+    addressBook.deleteContact(this.id);
+    $("#show-contact").hide();
+    displayContactDetails(addressBook);
+  });
+};
+
+//when document is ready
 $(function() {
+  attachContactListeners();
   $("form#new-contact").submit(function(event) {
-     event.preventDefault();
-     var inputtedFirstName = $("input#new-first-name").val();
-     var inputtedLastName = $("input#new-last-name").val();
-     var inputtedPhoneNumber = $("input#new-phone-number").val();
-     var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber);
-     addressBook.addContact(newContact);
-     console.log(addressBook.contacts);
+    event.preventDefault();
+    var inputtedFirstName = $("input#new-first-name").val();
+    var inputtedLastName = $("input#new-last-name").val();
+    var inputtedPhoneNumber = $("input#new-phone-number").val();
+    $("input#new-first-name").val("");
+    $("input#new-last-name").val("");
+    $("input#new-phone-number").val("");
+    var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber);
+    addressBook.addContact(newContact);
+    displayContactDetails(addressBook);
    })
 });
