@@ -1,4 +1,3 @@
-//simple comments for git practice
 var contactCounter = 0;
 
 // Business Logic for AddressBook  -------------
